@@ -10,11 +10,11 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-## Filtering Books With Api
-- /api/books/?genere=Fantasy&genere=Horror&genere=LF
+## Filter Guide
+- /api/books/?genere=Contemporary&genere=Detective&genere=Dystopian
+   1. this shows the books whose genere is Contemporary or Detective or Dystopian
+- /api/books/?genere=Contemporary&genere=Detective&genere=Dystopian&operation=and
+   1. this shows the books whose genere is Contemporary and Detective and Dystopian
+- /api/books/?genere=Contemporary&genere=Detective&genere=Dystopian&operation=and&search=ken
+   1. this shows the books whose genere is Contemporary and Detective and Dystopian and which have 'ken' in author, name, synopsis.
 
-- you have to provide the genere filter data on the query parameters <br/>
-  for example: http://127.0.0.1:8000/api/books/?genere=Fantasy&genere=Horror&genere=LF <br/>
-  then, by default, we list the book with ```"OR"``` operator  for genere field. that is; list all the books whose genere is `Fantasy` or `Horror` or `LF`.
-- However, if you specify `and` query param as `"true"` , <br/>
-  It lists the books wit `AND` operator. example url: `http://127.0.0.1:8000/api/books/?genere=Fantasy&genere=Horror&genere=LF`&and=true`
