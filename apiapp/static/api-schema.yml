@@ -1,0 +1,249 @@
+openapi: 3.0.0
+info:
+  title: ''
+  version: ''
+paths:
+  /api/books/:
+    get:
+      operationId: listBooks
+      description: "List the book with pagination feature. <br/>
+      You can filter by 'search', 'genere' queryparams. Also, 'operation' param handle operation of filter.
+      default value of 'operation' query param is 'or'"
+      parameters:
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      - name: offset
+        required: false
+        in: query
+        description: The initial index from which to return the results.
+        schema:
+          type: integer
+      - name: search
+        required: false
+        in: query
+        description: search books with text search
+        schema:
+          type: string
+      - name: genere
+        required: false
+        in: query
+        description: genere
+        schema:
+          type: array
+          items:
+            type: string
+            enum:
+            - Contemporary
+            - Detective
+            - Dystopian
+            - Fantasy
+            - Horror
+            - Mystery
+            - Romance
+            - Thriller
+      - name: operation
+        required: false
+        in: query
+        description: specify the multi-filter operation method
+        schema:
+          type: string
+          enum:
+          - or
+          - and
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                    example: 123
+                  next:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?offset=400&limit=100
+                  previous:
+                    type: string
+                    nullable: true
+                    format: uri
+                    example: http://api.example.org/accounts/?offset=200&limit=100
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Book'
+          description: ''
+      tags:
+      - api
+    post:
+      operationId: createBook
+      description: 'Create the book'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Book'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+      tags:
+      - api
+  /api/books/{id}/:
+    get:
+      operationId: retrieveBook
+      description: 'Retrieve Book by Id'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this book.
+        schema:
+          type: string
+
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+      tags:
+      - api
+    put:
+      operationId: updateBook
+      description: 'Update Book with Id'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this book.
+        schema:
+          type: string
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Book'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+      tags:
+      - api
+    patch:
+      operationId: partialUpdateBook
+      description: 'Updated Book By Id partially'
+
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this book.
+        schema:
+          type: string
+
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Book'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+          description: ''
+      tags:
+      - api
+    delete:
+      operationId: destroyBook
+      description: 'Remove the book in the database'
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: A unique integer value identifying this book.
+        schema:
+          type: string
+
+      responses:
+        '204':
+          description: ''
+      tags:
+      - api
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        genere:
+          type: array
+          items:
+            enum:
+            - Contemporary
+            - Detective
+            - Dystopian
+            - Fantasy
+            - Horror
+            - Mystery
+            - Romance
+            - Thriller
+            type: string
+          writeOnly: true
+        author:
+          type: string
+          maxLength: 255
+        name:
+          type: string
+          maxLength: 255
+        synopsis:
+          type: string
+        released:
+          type: string
+          format: date
+        price:
+          type: integer
+      required:
+      - genere
+      - author
+      - name
+      - synopsis
+      - released
